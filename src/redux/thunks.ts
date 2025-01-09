@@ -27,6 +27,3 @@ export const fetchLyrics = (trackId: string) => async (dispatch: AppDispatch) =>
         dispatch(fetchLyricsFailure(err.message));
     }
 };
-
-
-// p0xZk9WVWmWkEp7gznDRo16S3R3cCvsiAtsG6oGlBK4LF5D3bTcbGBnaliHjcuUK

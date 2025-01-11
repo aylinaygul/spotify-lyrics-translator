@@ -1,6 +1,8 @@
 import { AppDispatch } from './store';
-import { fetchLyricsStart, fetchLyricsSuccess, fetchLyricsFailure } from './slices/lyricsSlice';
 import { XMLParser } from 'fast-xml-parser';
+
+import { fetchLyricsStart, fetchLyricsSuccess, fetchLyricsFailure } from './slices/lyricsSlice';
+import { translationStart, translationSuccess, translationFailure } from './slices/translationSlice';
 
 export const fetchLyrics = (trackId: string) => async (dispatch: AppDispatch) => {
     dispatch(fetchLyricsStart());
@@ -25,5 +27,32 @@ export const fetchLyrics = (trackId: string) => async (dispatch: AppDispatch) =>
     } catch (error) {
         const err = error as Error;
         dispatch(fetchLyricsFailure(err.message));
+    }
+};
+
+const AWS = require('aws-sdk');
+AWS.config.update({
+    region: 'us-east-1',
+    accessKeyId: 'ACCESS_KEY_ID',
+    secretAccessKey: 'SECRET_ACCESS_KEY',
+});
+const translate = new AWS.Translate();
+
+export const fetchTranslation = (text: string, targetLanguage: string) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(translationStart());
+        const params = {
+            Text: text,
+            SourceLanguageCode: 'auto',
+            TargetLanguageCode: targetLanguage,
+        };
+
+        const response = await translate.translateText(params).promise();
+        const translatedText = response.TranslatedText;
+
+        dispatch(translationSuccess(translatedText));
+    } catch (error) {
+        const err = error as Error;
+        dispatch(translationFailure(err.message || "Translation failed"));
     }
 };

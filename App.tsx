@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native';
 import HomeScreen from "./src/screens/HomeScreen"
 import { store } from "./src/redux/store"
 import { Provider } from 'react-redux';
@@ -8,9 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Linking from 'expo-linking';
 
-
 export default function App() {
-
   const prefix = Linking.createURL('/');
 
   const linking = {

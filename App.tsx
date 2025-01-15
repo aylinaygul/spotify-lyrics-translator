@@ -1,24 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import HomeScreen from "./src/screens/HomeScreen"
 import { store } from "./src/redux/store"
 import { Provider } from 'react-redux';
 import LyricsScreen from './src/screens/LyricsScreen';
+import SpotifyLoginScreen from './src/screens/SpotifyLoginScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as Linking from 'expo-linking';
+
 
 export default function App() {
+
+  const prefix = Linking.createURL('/');
+
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        Home: 'home',
+        SpotifyLogin: 'spotify',
+        Lyrics: 'lyrics',
+      },
+    },
+  };
+
+  const Stack = createNativeStackNavigator();
+
   return (
     <Provider store={store}>
-      <View style={styles.container}>
-        <LyricsScreen />
-      </View>
+      <NavigationContainer linking={linking}>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="SpotifyLogin" component={SpotifyLoginScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Lyrics" component={LyricsScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    marginTop: '20%'
-  },
-});
+};

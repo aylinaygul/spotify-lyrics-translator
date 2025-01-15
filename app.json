@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "spotify-lyrics-translator",
+    "scheme": "translator",
     "slug": "spotify-lyrics-translator",
     "version": "1.0.0",
     "orientation": "portrait",

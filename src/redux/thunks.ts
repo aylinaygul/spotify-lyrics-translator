@@ -19,8 +19,15 @@ export const fetchLyrics = (track: Track) => async (dispatch: AppDispatch) => {
     try {
         dispatch(fetchLyricsStart());
         const response = await fetch('https://api.lyrics.ovh/v1/' + track.artists + '/' + track.name);
-        if (!response.ok) {
-            throw new Error(`API error: ${response.statusText}`);
+
+        if (response.status === 404) {
+            dispatch(fetchLyricsSuccess('Lyrics not found'));
+            return;
+        }
+
+        else if (!response.ok) {
+            dispatch(fetchLyricsFailure('Failed to fetch lyrics}'));
+            return;
         }
         const data = await response.json();
         const lyrics = data.lyrics;

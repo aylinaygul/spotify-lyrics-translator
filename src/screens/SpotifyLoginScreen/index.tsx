@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import WebView from 'react-native-webview';
 import { useDispatch } from 'react-redux';
 import { spotifyLogin } from '../../redux/thunks';
 import { AppDispatch } from '../../redux/store';
 import styles from './styles';
-
-require('dotenv').config();
-
+import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } from 'react-native-dotenv';
 const SpotifyLogin = () => {
-
     const dispatch = useDispatch<AppDispatch>();
     const [loading, setLoading] = useState(true);
 
     const authURL = `https://accounts.spotify.com/authorize?${new URLSearchParams({
         response_type: 'code',
-        client_id: process.env.SPOTIFY_CLIENT_ID,
+        client_id: SPOTIFY_CLIENT_ID,
         scope: 'user-read-private user-read-email user-read-currently-playing',
-        redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+        redirect_uri: SPOTIFY_REDIRECT_URI,
     }).toString()}`;
 
     const handleNavigationStateChange = (event: any) => {

@@ -1,31 +1,29 @@
 import { AppDispatch, RootState } from './store';
-import { XMLParser } from 'fast-xml-parser';
 
 import { fetchLyricsStart, fetchLyricsSuccess, fetchLyricsFailure } from './slices/lyricsSlice';
 import { fetchCurrentTrackStart, fetchCurrentTrackSuccess, fetchCurrentTrackFailure } from './slices/playerSlice';
 import { translationStart, translationSuccess, translationFailure } from './slices/translationSlice';
 import { loginStart, loginSuccess, loginFailure, refreshStart, refreshSuccess, refreshFailure, logout } from './slices/authSlice';
 
+import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI } from 'react-native-dotenv';
 
-export const fetchLyrics = (trackId: string) => async (dispatch: AppDispatch) => {
-    dispatch(fetchLyricsStart());
+interface Track {
+    id: string;
+    name: string;
+    artists: string;
+    album: string;
+    imageUrl: string;
+}
+
+export const fetchLyrics = (track: Track) => async (dispatch: AppDispatch) => {
     try {
-        const response = await fetch(`http://api.chartlyrics.com/apiv1.asmx/GetLyric?lyricId=194278&lyricCheckSum=78eaaf78ba4ed0b36c2a05aafe05fb6f`);
-
+        dispatch(fetchLyricsStart());
+        const response = await fetch('https://api.lyrics.ovh/v1/' + track.artists + '/' + track.name);
         if (!response.ok) {
             throw new Error(`API error: ${response.statusText}`);
         }
-
-        const text = await response.text();
-
-        const parser = new XMLParser();
-        const data = parser.parse(text);
-        const lyrics = data.GetLyricResult?.Lyric;
-
-        if (!lyrics) {
-            throw new Error('Lyrics not found');
-        }
-
+        const data = await response.json();
+        const lyrics = data.lyrics;
         dispatch(fetchLyricsSuccess(lyrics));
     } catch (error) {
         const err = error as Error;
@@ -35,9 +33,9 @@ export const fetchLyrics = (trackId: string) => async (dispatch: AppDispatch) =>
 
 const AWS = require('aws-sdk');
 AWS.config.update({
-    region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: AWS_REGION,
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
 });
 const translate = new AWS.Translate();
 
@@ -60,11 +58,6 @@ export const fetchTranslation = (text: string, targetLanguage: string) => async 
     }
 };
 
-require('dotenv').config();
-
-var clientId = process.env.SPOTIFY_CLIENT_ID;
-var clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-var redirectUri = process.env.SPOTIFY_REDIRECT_URI;
 
 export const spotifyLogin = (authCode: string) => async (dispatch: AppDispatch) => {
     dispatch(loginStart());
@@ -73,12 +66,12 @@ export const spotifyLogin = (authCode: string) => async (dispatch: AppDispatch) 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+                Authorization: `Basic ${btoa(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`)}`,
             },
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code: authCode,
-                redirect_uri: redirectUri,
+                redirect_uri: SPOTIFY_REDIRECT_URI,
             }).toString(),
         });
 
@@ -101,7 +94,7 @@ export const refreshSpotifyToken = (refreshToken: string) => async (dispatch: Ap
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+                Authorization: `Basic ${btoa(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`)}`,
             },
             body: new URLSearchParams({
                 refresh_token: refreshToken,
@@ -126,14 +119,6 @@ export const refreshSpotifyToken = (refreshToken: string) => async (dispatch: Ap
 export const spotifyLogout = () => (dispatch: AppDispatch) => {
     dispatch(logout());
 };
-
-interface Track {
-    id: string;
-    name: string;
-    artists: string;
-    album: string;
-    imageUrl: string;
-}
 
 export const fetchCurrentTrack = () => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchCurrentTrackStart());

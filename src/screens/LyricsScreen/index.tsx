@@ -73,9 +73,6 @@ const LyricsScreen = () => {
                     ))}
                 </ScrollView>
             </View>
-            <View style={{ flex: 1 }}>
-                <Button title="Translate" onPress={() => {/* Navigate to translation screen */ }} />
-            </View>
         </View>
     );
 };

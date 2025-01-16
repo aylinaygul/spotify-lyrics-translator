@@ -18,7 +18,7 @@ const SpotifyLogin = () => {
     }).toString()}`;
 
     const handleNavigationStateChange = (event: any) => {
-        if (event.url.startsWith(process.env.SPOTIFY_REDIRECT_URI)) {
+        if (event.url.startsWith(SPOTIFY_REDIRECT_URI)) {
             const urlParams = new URLSearchParams(event.url.split('?')[1]);
             const authCode = urlParams.get('code');
             if (authCode) { dispatch(spotifyLogin(authCode)); }

@@ -5,8 +5,6 @@ import { fetchCurrentTrackStart, fetchCurrentTrackSuccess, fetchCurrentTrackFail
 import { translationStart, translationSuccess, translationFailure } from './slices/translationSlice';
 import { loginStart, loginSuccess, loginFailure, refreshStart, refreshSuccess, refreshFailure, logout } from './slices/authSlice';
 
-import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI } from 'react-native-dotenv';
-
 interface Track {
     id: string;
     name: string;
@@ -40,9 +38,9 @@ export const fetchLyrics = (track: Track) => async (dispatch: AppDispatch) => {
 
 const AWS = require('aws-sdk');
 AWS.config.update({
-    region: AWS_REGION,
-    accessKeyId: AWS_ACCESS_KEY_ID,
-    secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 const translate = new AWS.Translate();
 
@@ -73,12 +71,12 @@ export const spotifyLogin = (authCode: string) => async (dispatch: AppDispatch) 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: `Basic ${btoa(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`)}`,
+                Authorization: `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`,
             },
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code: authCode,
-                redirect_uri: SPOTIFY_REDIRECT_URI,
+                redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
             }).toString(),
         });
 
@@ -101,7 +99,7 @@ export const refreshSpotifyToken = (refreshToken: string) => async (dispatch: Ap
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: `Basic ${btoa(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`)}`,
+                Authorization: `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`,
             },
             body: new URLSearchParams({
                 refresh_token: refreshToken,

@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "spotify-lyrics-translator",
+    "owner": "aylinaygul",
     "scheme": "slt",
     "slug": "spotify-lyrics-translator",
     "platforms": [

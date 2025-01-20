@@ -1,8 +1,11 @@
 {
   "expo": {
     "name": "spotify-lyrics-translator",
-    "scheme": "translator",
+    "scheme": "slt",
     "slug": "spotify-lyrics-translator",
+    "platforms": [
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,6 +20,23 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.aylinaygul.spotifylyricstranslator",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "slt",
+              "host": "*",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -24,6 +44,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d31a0f52-ae70-4d12-81c3-0a2d9c5c45fb"
+      }
     }
   }
 }

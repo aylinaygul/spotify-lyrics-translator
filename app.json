@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "spotify-lyrics-translator",
-    "scheme": "translator",
+    "scheme": "slt",
     "slug": "spotify-lyrics-translator",
     "platforms": [
       "android"
@@ -44,6 +44,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d31a0f52-ae70-4d12-81c3-0a2d9c5c45fb"
+      }
     }
   }
 }

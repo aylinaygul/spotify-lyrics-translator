@@ -5,19 +5,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#121212', // Spotify'nın koyu arka planı
+    backgroundColor: '#121212',
     padding: 20,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1DB954', // Spotify yeşili
+    color: '#1DB954',
     marginBottom: 20,
   },
   card: {
     width: '100%',
     borderRadius: 10,
-    backgroundColor: '#181818', // Koyu arka plan için
+    backgroundColor: '#181818',
     padding: 20,
   },
   text: {
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    color: '#b3b3b3', // Hafif gri ton
+    color: '#b3b3b3',
   },
   cardActions: {
     justifyContent: 'center',

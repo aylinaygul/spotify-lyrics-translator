@@ -76,7 +76,7 @@ export const spotifyLogin = (authCode: string) => async (dispatch: AppDispatch) 
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code: authCode,
-                redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+                redirect_uri: 'slt://lyrics',
             }).toString(),
         });
 

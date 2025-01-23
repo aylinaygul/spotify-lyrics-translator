@@ -14,11 +14,11 @@ const SpotifyLogin = () => {
         response_type: 'code',
         client_id: process.env.SPOTIFY_CLIENT_ID,
         scope: 'user-read-private user-read-email user-read-currently-playing',
-        redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+        redirect_uri: 'slt://lyrics',
     }).toString()}`;
 
     const handleNavigationStateChange = (event: any) => {
-        if (event.url.startsWith(process.env.SPOTIFY_REDIRECT_URI)) {
+        if (event.url.startsWith('slt://lyrics')) {
             const urlParams = new URLSearchParams(event.url.split('?')[1]);
             const authCode = urlParams.get('code');
             if (authCode) { dispatch(spotifyLogin(authCode)); }
